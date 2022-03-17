@@ -25,7 +25,12 @@ class BuzzNotificationListenerService : NotificationListenerService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        Log.i("BuzzNotificationListenrService", "notificationPosted")
+        if (sbn.packageName.endsWith("android.apps.maps")) {
+            // com.google.android.apps.maps
+            // ignore this app because it creates too many notification signals
+            return
+        }
+
         val notificationEntry = NotificationEntry(sbn)
 
         val app: MorseBuzzerApplication = applicationContext as MorseBuzzerApplication

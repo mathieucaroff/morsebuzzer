@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
         }
         val text = sb.toString()
 
-        val textView = findViewById<TextView>(R.id.theBuzzAgainTextView)
+        val textView = findViewById<TextView>(R.id.theMorseBuzzerTextView)
         textView.text = text
     }
 

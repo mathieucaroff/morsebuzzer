@@ -45,13 +45,11 @@ class NotificationEntry(val origin: StatusBarNotification) : Any() {
     }
 
     fun isSimilarTo(other: NotificationEntry?): Boolean {
-        Log.i("isSimilarTo", this.toString() + other?.toString() ?: "_")
         if (other === null) {
             return false
         }
         val tt = trigram == other?.trigram
         val pp = Math.abs(origin.postTime.compareTo(other.origin.postTime)) < 30_000
-        Log.i("isSimilarTo", tt.toString() + "_" + pp.toString())
         return tt && pp
     }
 }
