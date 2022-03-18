@@ -25,9 +25,14 @@ class BuzzNotificationListenerService : NotificationListenerService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        if (sbn.packageName.endsWith("android.apps.maps")) {
+        if (false
+            || sbn.packageName.endsWith("android.apps.maps")
+            || sbn.packageName.endsWith("android.dialer")
+        ) {
             // com.google.android.apps.maps
             // ignore this app because it creates too many notification signals
+            // com.google.android.dialer
+            // ignore this because it creates notifications during phone calls
             return
         }
 
