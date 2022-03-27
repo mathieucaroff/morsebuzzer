@@ -57,8 +57,9 @@ class MainActivity : AppCompatActivity() {
         val s = app.NOTIFICATION_LOG_SIZE
         for (k in s-1 downTo 0) {
             val index = (k + app.notificationLogIndex) % s
-            val entry = app.notificationLog[index]?.logValue() ?: ""
-            if (entry != "") {
+            val notification = app.notificationLog[index]
+            if (notification != null) {
+                val entry = notification.logValue()
                 sb.append(entry, "\n")
             }
         }

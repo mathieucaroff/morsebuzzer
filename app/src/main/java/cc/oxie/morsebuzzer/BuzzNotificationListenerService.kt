@@ -37,15 +37,27 @@ class BuzzNotificationListenerService : NotificationListenerService() {
         }
 
         val notificationEntry = NotificationEntry(sbn)
+        var isDuplicate = false
 
         val app: MorseBuzzerApplication = applicationContext as MorseBuzzerApplication
-        app.notificationLog[app.notificationLogIndex] = notificationEntry
-        app.notificationLogIndex += 1
-        app.notificationLogIndex %= app.NOTIFICATION_LOG_SIZE
-
         val size = app.NOTIFICATION_LOG_SIZE
-        if (!notificationEntry.isSimilarTo(app.notificationLog[(app.notificationLogIndex + size - 2) % size])) {
-            notificationEntry.vibrate(this.vibrator!!)
+        for (k in 0 until size) {
+            if(notificationEntry.isSimilarTo(app.notificationLog[k])) {
+                // duplicate encountered
+                isDuplicate = true
+                if (notificationEntry.isEqualTo(app.notificationLog[k])) {
+                    return
+                }
+            }
         }
+
+        app.notificationLog[app.notificationLogIndex] = notificationEntry
+        app.notificationLogIndex = (1 + app.notificationLogIndex) % size
+
+        if (isDuplicate) {
+            return
+        }
+
+        notificationEntry.vibrate(this.vibrator!!)
     }
 }

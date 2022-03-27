@@ -5,10 +5,8 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.absoluteValue
 
 class NotificationEntry(val origin: StatusBarNotification) : Any() {
     private val bundle = this.origin.notification.extras
@@ -19,7 +17,7 @@ class NotificationEntry(val origin: StatusBarNotification) : Any() {
         this.origin.packageName
     ).toString()
 
-    private val trigram = text.toUpperCase().replace("[^A-Za-z]".toRegex(), "").slice(0 until 3)
+    private val trigram = text.uppercase().replace("[^A-Za-z]".toRegex(), "").slice(0 until 3)
     private val timingArray =
         stringToMorseTimingArray(trigram.split("").joinToString(" ")).map { it.toLong() * 150L }
             .toLongArray()
@@ -48,8 +46,12 @@ class NotificationEntry(val origin: StatusBarNotification) : Any() {
         if (other === null) {
             return false
         }
-        val tt = trigram == other?.trigram
-        val pp = Math.abs(origin.postTime.compareTo(other.origin.postTime)) < 30_000
-        return tt && pp
+        val trigram = trigram == other.trigram
+        val postTime = Math.abs(origin.postTime.compareTo(other.origin.postTime)) < 30_000
+        return trigram && postTime
+    }
+
+    fun isEqualTo(other: NotificationEntry?): Boolean {
+        return text == other?.text
     }
 }
